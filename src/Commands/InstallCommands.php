@@ -20,7 +20,7 @@ class InstallCommands extends Command
      *
      * @var string
      */
-    protected $description = 'INstall Laravel';
+    protected $description = 'Install Laravel';
 
     /**
      * Create a new command instance.
@@ -59,8 +59,6 @@ class InstallCommands extends Command
         File::chmod('../storage/logs');
         File::chmod('../bootstrap/cache');
 
-        self::changeAliasStorageOwner();
-
         $data = json_encode(
             [
                 'date' => date('Y/m/d H:i:s'),
@@ -82,47 +80,5 @@ class InstallCommands extends Command
 
         $this->info('Installation completed successfully');
         return true;
-    }
-
-    private static function changeAliasStorageOwner()
-    {
-        $folderOwnerToChange = public_path('storage');
-        $targetFolderPath = storage_path('app');
-
-        if (!is_dir($folderOwnerToChange)) {
-            return;
-        }
-
-        if ( ! is_dir($targetFolderPath)) {
-            return;
-        }
-
-        $user = [];
-        $owner_id = fileowner($targetFolderPath);
-        if ($owner_id !== false) {
-            if (function_exists('posix_getpwuid')) {
-                $owner_info = posix_getpwuid($owner_id);
-                if ( ! empty($owner_info['name'])) {
-                    $user[] = $owner_info['name'];
-                }
-            }
-        }
-        $group_id = filegroup($targetFolderPath);
-        if ($group_id !== false) {
-            if (function_exists('posix_getgrgid')) {
-                $group_info = posix_getgrgid($group_id);
-                if ( ! empty($group_info['name'])) {
-                    $user[] = $group_info['name'];
-                }
-            }
-        }
-
-        if (count($user) === 2) {
-            $folderUserInfo = implode(':', $user);
-
-            if (function_exists('exec')) {
-                exec("chown -R ".$folderUserInfo." ".$folderOwnerToChange);
-            }
-        }
     }
 }
