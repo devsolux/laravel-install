@@ -4,6 +4,20 @@
 php artisan laravel:install
 ```
 
+```json
+{
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/devsolux/laravel-install"
+    }
+  ],
+  "require": {
+    "devsolux/laravel-install": "dev-master"
+  }
+}
+```
+
 ## PHP configuration
 ```ini
 max_execution_time = 30000
