@@ -59,15 +59,6 @@ class InstallCommands extends Command
         File::chmod('../storage/logs');
         File::chmod('../bootstrap/cache');
 
-        $data = json_encode(
-            [
-                'date' => date('Y/m/d H:i:s'),
-            ],
-            JSON_THROW_ON_ERROR
-        );
-
-        file_put_contents(storage_path('installed'), $data, FILE_APPEND | LOCK_EX);
-
         $this->info('Step 6 of 7 - Optimization and clear cache');
         $this->call('route:clear');
         $this->call('cache:clear');
